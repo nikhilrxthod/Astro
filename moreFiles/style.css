@@ -6,16 +6,16 @@
 }
 html{
     scroll-behavior: smooth;
+    scroll-snap-stop:always;
+    scroll-snap-type: mandatory;
 }
 body{
     color: #fff;
+    user-select: none;
     font-family: sans-serif;
 }
 a{
     text-decoration: none;
-}
-button{
-  user-select: none;
 }
 .main{
     width: 100%;
@@ -25,11 +25,10 @@ button{
   position: fixed;
   width: 100%;
   height: 100%;
-  z-index: 3;
+  z-index: 2;
   display: flex;
   font-size: 1rem;
   color: #00ffff;
-  user-select: none;
   align-items: center;
   justify-content: center;
   flex-direction: column;
@@ -101,7 +100,7 @@ button{
     list-style: none;
     width: 20px;
     height: 20px;
-    color: #FF4B9C;
+    color: #973360d2;
     background: currentColor;
     animation: animate 25s linear infinite;
     bottom: -150px;
@@ -198,8 +197,6 @@ button{
     display: flex;
     align-items: center;
     padding: 10px 12px;
-    z-index: 1;
-    user-select: none;
     justify-content: space-between;
     background: #212D3B;
 }
@@ -213,26 +210,31 @@ button{
     align-items: center;
     justify-content: center;
 }
+.profilePic{
+    min-width: 25px;
+    min-height: 25px;
+    color: #fff;
+    display: flex;
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: sans-serif;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin-right: 5px;
+    background-color: #6f00ff;
+}
 .img{
     width: 40px;
     height: 40px;
-    display: flex;
-    border-radius: 50%;
-    align-items: center;
-    overflow: hidden;
     border: none;
-    color: #fff;
-    transition: all .2s;
+    margin: 0;
+    outline: 2px solid #6f00ff;
     outline-offset: 2px;
     font-size: 1.5rem;
-    font-weight: 600;
-    font-family: cursive;
-    justify-content: center;
-    background: #000;
-    outline: 3px solid #000;
-    text-shadow: 0 0 2px currentColor;
+    background-color: #6f00ff;
 }
-.img:active{
+.profilePicSec:active{
     transform: scale(.8);
 }
 .userInfo{
@@ -246,7 +248,6 @@ button{
     color: #00ffaa;
     font-weight: 500;
     font-size: 1.5rem;
-    user-select: all;
     display: flex;
     align-items: flex-start;
     justify-content: center;
@@ -262,7 +263,105 @@ button{
     font-weight: 500;
     letter-spacing: -0.5px;
 }
-.scrollDownBtn{
+.infoBtn{
+    border: none;
+    outline: none;
+    transition: .2s;
+    background-color: transparent;
+}
+.infoBtn:active{
+    transform: scale(.85);
+}
+.infoBtn:focus ~ .aboutThis{
+    display: flex;
+}
+.aboutThis{
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    position: fixed;
+    padding: 30px;
+    display: none;
+    align-items: start;
+    justify-content: center;
+    flex-direction: column;
+    background-color: #11192483;
+    backdrop-filter: blur(10px);
+    transform: translate(-50%,-50%);
+}
+.date{
+    width: 100%;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #07b480;
+    text-align: center;
+    margin: 20px 0;
+}
+.abt{
+    font-size: 2.5rem;
+    margin: 10px 0;
+    mix-blend-mode: lighten;
+    text-decoration: line-through;
+}
+.aboutTxt{
+    font-size: 1.05rem;
+    font-weight: 500;
+    margin: 30px 0;
+    color: #ccc;
+}
+.regard{
+    padding: 5px 20px;
+    margin: 10px 0px;
+    line-height: 25px;
+    border-left: 2px solid #fff;
+}
+.regardName{
+    color: #fff;
+    font-weight: 700;
+    font-size: .95rem;
+    padding: 2px 5px;
+    border-radius: 5px;
+    background-color: crimson;
+    text-transform: uppercase;
+}
+.scrollBtnsSec{
+    position: fixed;
+    z-index: 1;
+    right: 5px;
+    display: flex;
+    transition: .1s;
+    padding: 2px;
+    border-radius: 30px;
+    align-items: center;
+    justify-content: center;
+    border: 1.2px solid #fff;
+    background-color: #111924;
+}
+::-webkit-scrollbar{
+    width: 3px;
+    background-color: transparent;
+}
+::-webkit-scrollbar-thumb{
+    border-radius: 10px;
+    background-color: #fff;
+}
+.scrollBtnsUp{
+    top: 75px;
+    align-items: start;
+}
+.scrollBtnsUp:active{
+    transform: translateY(-5px);
+}
+.scrollBtnsDown{
+    bottom: 70px;
+    align-items: end;
+}
+.scrollBtnsDown:active{
+    transform: translateY(5px);
+}
+.scrollBtns{
     color: #fff;
     border: none;
     outline: none;
@@ -272,9 +371,6 @@ button{
     justify-content: center;
     transition: all .2s;
     background-color: transparent;
-}
-.scrollDownBtn:active{
-    background-color: #008fe2;
 }
 .joinedSec{
     width: 100%;
@@ -314,24 +410,48 @@ button{
 }
 .outerSkin{
     width: 100%;
-    padding: 2px;
+    margin: 2px 0;
     display: flex;
-    border-radius: 15px;
+    z-index: 0;
+    border-radius: 5px;
+    justify-content: center;
     flex-direction: column;
-}
-.highlighted{
-    filter: invert(1);
-    outline-offset: -2px;
-    outline: 2px solid #008fe2;
-    backdrop-filter: invert(0) blur(10px);
+    transition: background .2s;
 }
 .myOuterSkin{
     align-items: end;
-    justify-content: end;
 }
 .yourOuterSkin{
     align-items: start;
-    justify-content: start;
+}
+.outerSkin:active{
+    background-color: #ffffff44;
+    backdrop-filter: blur(10px);
+}
+.outerSkinSelected{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 50%;
+    z-index: 1;
+    left: 50%;
+    backdrop-filter: blur(5px);
+    background-color: #000000ad;
+    transform: translate(-50%,-50%);
+}
+.highlighted{
+    animation: changeBg 3s ease;
+}
+@keyframes changeBg {
+    0%{
+        background-color: transparent;
+    }
+    50%{
+        background-color: #4dff9d;
+    }
+    100%{
+        background-color: transparent;
+    }
 }
 .msgContainer{
     max-width: 95%;
@@ -399,9 +519,9 @@ button{
     border-radius: 11px;
     max-width: 100%;
     display: flex;
-    align-items: center;
+    align-items: start;
     justify-content: start;
-    max-height: 300px;
+    max-height: 400px;
     background-color: #00000017;
     box-shadow: 2px 2px 2px #000000a2;
 }
@@ -412,27 +532,13 @@ button{
     background-color: #ffffff1e;
 }
 .message{
+    user-select: all;
     padding: 2px;
     color: #fff;
     overflow: auto;
     font-size: 1rem;
     font-weight: 500;
     word-wrap: break-word;
-}
-.profilePic{
-    min-width: 25px;
-    min-height: 25px;
-    color: #fff;
-    display: flex;
-    font-size: 1rem;
-    font-weight: 600;
-    font-family: cursive;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    margin-right: 5px;
-    user-select: no;
-    background-color: #6f00ff;
 }
 .moreDetail{
     display: flex;
@@ -449,7 +555,6 @@ button{
     margin: 3px 1px;
     display: flex;
     align-items: center;
-    user-select: none;
     justify-content: center;
 }
 .time{
@@ -466,9 +571,10 @@ button{
 .funcBtns{
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    flex-direction: column;
 }
-.deleteMsg,.closeReplying{
+.deleteMsg, .selectMsgBox{
     border: none;
     outline: none;
     color: #fff;
@@ -477,6 +583,18 @@ button{
     font-weight: 500;
     border-radius: 4px;
     border: 1px solid #da0000;
+    background-color: #da0000;
+    width: 100%;
+}
+.deleteMsg{
+    margin-top: 8px;
+}
+.selectMsgBox{
+    color: #da0000;
+    background-color: transparent;
+}
+.selectMsgBox:focus{
+    color: #fff;
     background-color: #da0000;
 }
 .imojiMsg{
@@ -518,15 +636,14 @@ button{
 }
 .deletedMsg{
     color: #fff;
-    user-select: none;
     display: flex;
     font-size: .8rem;
     font-weight: 500;
+    user-select: none;
     align-items: center;
     justify-content: center;
     font-family: monospace;
 }
-
 .typeMsg{
     z-index: 1;
     width: 100%;
@@ -542,7 +659,6 @@ button{
 }
 .replyToMsgSecPad{
     width: 100%;
-    z-index: 2;
     padding: 0 8px;
     margin-bottom: 8px;
     background-color: #212D3B;
@@ -557,12 +673,14 @@ button{
 }
 .closeReplying{
     position: absolute;
-    top: -8px;
-    right: -8px;
+    top: -5px;
+    right: -5px;
     color: #fff;
-    border-color: currentColor;
-    background-color: #000;
-    box-shadow: inset 0 0 3px currentColor;
+    padding: 4px;
+    border-radius: 50%;
+    border: 2px solid currentColor;
+    background-color: #f00;
+    /* box-shadow: inset 0 0 3px currentColor; */
 }
 .replyToMsgSecInYour{
     justify-content: flex-start;
@@ -662,7 +780,6 @@ button{
 }
 .inputBox[data-placeholder]:not([data-placeholder=""]):empty::before{
     color: #99ABB5;
-    user-select: none;
     pointer-events: none;
     content: attr(data-placeholder);
 }
