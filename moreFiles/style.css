@@ -582,20 +582,17 @@ a{
     padding: 1px 3px;
     font-weight: 500;
     border-radius: 4px;
-    border: 1px solid #da0000;
-    background-color: #da0000;
+    border: 1px solid #ff0000;
+    background-color: #b10000;
     width: 100%;
 }
 .deleteMsg{
     margin-top: 8px;
 }
 .selectMsgBox{
-    color: #da0000;
-    background-color: transparent;
-}
-.selectMsgBox:focus{
-    color: #fff;
-    background-color: #da0000;
+    color: #000;
+    border-color: #18ffb2;
+    background-color: #ddd;
 }
 .imojiMsg{
     font-size: 2rem;
