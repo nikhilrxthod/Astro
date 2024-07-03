@@ -4,6 +4,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Astro</title>
+    <link rel="shortcut icon" href="moreFiles/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="moreFiles/style.css">
 </head>
 <body>
@@ -43,32 +44,46 @@
                 <li></li>
                 <li></li>
             </ul>
-	</div>
+        </div>
     </div>
     <div class="main">
         <div class="skin">
 			<nav class="navbar">
 				<div class="leftSide">
 					<div class="profileSec">
-						<button id="img" class="img" type="button">
+						<div id="img" class="profilePic img">
                             ?
-						</button>
+                        </div>
 						<div class="userInfo">
-							<span class="name"><span class="name uName" id="name">Francine Riley</span>//</span>
+							<span class="name"><span class="name uName" id="name">Francine Riley</span>_//
+                        </span>
 							<span class="status" id="status">Connected</span>
 						</div>
 					</div>
 				</div>
-				<div class="scrollBtns">
-                    <button class="scrollDownBtn" type="button" style="transform: rotate(180deg);" onclick="document.getElementById('messageSec').scrollTo(document.getElementById('messageSec').scrollHeight, 0)">
-                        <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" stroke="#fff" stroke-width="1.9200000000000004" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                <div class="about">
+                    <button class="infoBtn" id="infoBtn">
+                        <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <circle cx="12" cy="12" r="10" stroke="#fff" stroke-width="1.5"></circle> <path d="M12 17V11" stroke="#fff" stroke-width="1.5" stroke-linecap="round"></path> <circle cx="1" cy="1" r="1" transform="matrix(1 0 0 -1 11 9)" fill="#fff"></circle> </g></svg>
                     </button>
-                    <button class="scrollDownBtn" type="button" onclick="document.getElementById('messageSec').scrollTop = document.getElementById('messageSec').scrollHeight">
-                        <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" stroke="#fff" stroke-width="1.9200000000000004" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-                    </button>
+                    <div class="aboutThis">
+                        <div class="date" id="date"></div>
+                        <h2 class="abt">About</h2>
+                        <p class="aboutTxt">A weather community application designed to provide users with real-time weather updates and facilitate community-driven weather reporting and sharing. The application allows users to contribute localized weather data, share weather-related experiences, and interact with other users in a collaborative environment. The patent covers the method and system for collecting, analyzing, and displaying weather data from multiple sources, including user-generated content, to enhance the accuracy and relevance of weather information.</p>
+                        <p class="regard">Regars:<br><span class="regardName">Nikhil Rathod</span></p>
+                    </div>
                 </div>
 			</nav>
 			<div name="userData" class="messageSec" id="messageSec">
+				<div class="scrollBtnsSec scrollBtnsUp">
+                    <button class="scrollBtns" type="button" style="transform: rotate(180deg);" onclick="document.getElementById('messageSec').scrollTo(document.getElementById('messageSec').scrollHeight, 0)">
+                        <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" stroke="#fff" stroke-width="1.9200000000000004" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                    </button>
+                </div>
+				<div class="scrollBtnsSec scrollBtnsDown">
+                    <button class="scrollBtns" type="button" onclick="document.getElementById('messageSec').scrollTop = document.getElementById('messageSec').scrollHeight">
+                        <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" stroke="#fff" stroke-width="1.9200000000000004" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                    </button>
+                </div>
 				<div class="height"></div>
 				<div id="messageSecIn" class="messageSecIn">
 					<div class="outerSkin yourOuterSkin" id="test">
@@ -79,6 +94,10 @@
 									<span id="yourMessage" class="message yourMessage">Wellcome home Guysss!</span>
 								</div>
 							</div>
+                            <div class="funcBtns">
+                                <button class="selectMsgBox">Lock</button>
+                                <button class="deleteMsg">Del</button>
+                            </div>
 						</div>
 						<div class="moreDetail">
 							<div class="timeBox">
@@ -119,7 +138,8 @@
             menuTxt.classList.remove('menuTxtHide')
             sendBtnTxt.classList.add('sendBtnTxtHide')
         }
-        </script>
+    </script>
 	<script src="moreFiles/script.js" type="module"></script>
 </body>
 </html>
+
