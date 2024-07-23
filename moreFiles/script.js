@@ -104,7 +104,7 @@ function retrieveData(){
             set(ref(db, 'messages/' + timeStamp), {
                 key: replyToMsgBoxIn.getAttribute('key'),
                 replyToUser: replyToUserBoxIn,
-                replyToMsg: replyToMsgBoxIn.innerHTML.trim(),
+                replyToMsg: replyToMsgBoxIn.innerText.trim(),
                 user: localStorage.getItem('userName').trim(),
                 message: userMessage.innerText.trim(),
                 time: currentTime,
