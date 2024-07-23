@@ -106,7 +106,7 @@ function retrieveData(){
                 replyToUser: replyToUserBoxIn,
                 replyToMsg: replyToMsgBoxIn.innerHTML.trim(),
                 user: localStorage.getItem('userName').trim(),
-                message: userMessage.innerHTML.trim(),
+                message: userMessage.innerText.trim(),
                 time: currentTime,
                 reply: true
             }).then(() => {
@@ -116,7 +116,7 @@ function retrieveData(){
         } else{
             set(ref(db, 'messages/' + timeStamp), {
                 user: localStorage.getItem('userName').trim(),
-                message: userMessage.innerHTML.trim(),
+                message: userMessage.innerText.trim(),
                 time: currentTime
             }).then(() => {
                 sent.play();
@@ -310,6 +310,7 @@ function retrieveData(){
                 }
                 getRandomColor2(snapshot.val().replyToUser.charAt(0))
             }
+            userData.scrollTop = userData.scrollHeight;
         }
         if(snapshot.val().user !== userName){
             if(!snapshot.val().join){
@@ -330,7 +331,6 @@ function retrieveData(){
             }
             getRandomColor(snapshot.val().user.charAt(0))
         }
-        userData.scrollTop = userData.scrollHeight;
     })
     typer.onkeydown = function(){
         window.clearTimeout(timer);
