@@ -1,15 +1,26 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
 import { getDatabase, ref, set, get, push, child, update, remove, onChildAdded, onChildRemoved } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
 const firebaseConfig = {
+
     apiKey: "AIzaSyB90bxriKKTbUDGz6p5eEUO65--_dhrXiY",
+  
     authDomain: "firstmode-7fa5a.firebaseapp.com",
+  
+    databaseURL: "https://firstmode-7fa5a-default-rtdb.firebaseio.com",
+  
     projectId: "firstmode-7fa5a",
+  
     storageBucket: "firstmode-7fa5a.appspot.com",
+  
     messagingSenderId: "568875056319",
+  
     appId: "1:568875056319:web:73147a773b1180493d1a0a"
-};
+  
+  };
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+const dbRef = ref(getDatabase());
+
 setInterval(() => {
     var myDate = new Date();
     let monthsList = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Aug', 'Oct', 'Nov', 'Dec'];
@@ -20,21 +31,23 @@ setInterval(() => {
     var currentTime = myDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: 'numeric', hour12: true });
     var dateAndTime = (currentTime + ', ' + today);
     document.getElementById('date').innerHTML = dateAndTime;
+    document.getElementById('date2').innerHTML = dateAndTime;
 }, 1000);
 function retrieveData(){
-    var sent = new Audio('sent.wav');
-    var received = new Audio('received.wav');
+    var sent = new Audio('moreFiles/sent.wav');
+    var received = new Audio('moreFiles/received.wav');
     let userMessage = document.getElementById("inputBox");
     let username = document.getElementById("name");
     let img = document.getElementById("img");
-    var userValid = /^[a-zA-Z0-9]+$/;
+    var userValid = /^[a-zA-Z0-9_-]+$/;
     var userName;
     const admin = 'Nick';
     function checkName() {
         userName = prompt("Enter your name").toLowerCase().trim();
-        if (userName.length >= 3 && userName.length <= 8 && userName.match(userValid)) {
+        if (userName.length >= 3 && userName.length <= 12 && userName.match(userValid)) {
             localStorage.setItem('userName', userName);
             username.innerText = localStorage.getItem("userName");
+            document.getElementById('myUsername2').innerHTML = localStorage.getItem("userName");
             img.innerText = localStorage.getItem("userName").split(' ')[0].charAt(0).toUpperCase();
         } else {
             checkName()
@@ -42,11 +55,12 @@ function retrieveData(){
     }
     if (localStorage.getItem('userName')) {
         username.innerText = userName = localStorage.getItem('userName');
+        document.getElementById('myUsername2').innerHTML = localStorage.getItem("userName");
         img.innerText = localStorage.getItem("userName").split(' ')[0].charAt(0).toUpperCase();
     } else {
         checkName();
     }
-    var profileImg = document.getElementById('img');
+    var slash = document.getElementById('slash');
     function getRandomColor(name) {
         const asciiCode = name.charCodeAt(0);
         const colorNum = asciiCode.toString() + asciiCode.toString() + asciiCode.toString();
@@ -54,8 +68,7 @@ function retrieveData(){
         var r = num >> 16 & 255;
         var g = num >> 8 & 255;
         var b = num & 255;
-        profileImg.style.backgroundColor = 'rgb(' + r + ', ' + g + ', ' + b + ', 1)';
-        profileImg.style.outlineColor = 'rgb(' + r + ', ' + g + ', ' + b + ', 1)';
+        slash.style.color = 'rgb(' + r + ', ' + g + ', ' + b + ', 1)';
     }
     getRandomColor(localStorage.getItem("userName").charAt(0));
     var timeStamp = new Date().getTime();
@@ -70,7 +83,7 @@ function retrieveData(){
             time: currentTime,
             join: true
         })
-    });
+    }, 5000);
     module.sendMsg = function sendMsg() {
         var timeStamp = new Date().getTime();
         var getDate = new Date();
@@ -113,14 +126,17 @@ function retrieveData(){
         userMessage.focus()
         userMessage.innerText = "";
     }
+    let timer, timeoutVal = 800;
+    let status = document.getElementById('typerStatus');
+    let typer = document.getElementById('typer');
     var userData = document.getElementById("messageSec");
     var urlRegex = /(https?:\/\/[^\s]+)/g;
     var nameRegex = /(@[^\s]+)/g;
-    onChildAdded(ref(db, 'messages'), (snapshot) => {         
+    onChildAdded(ref(db, 'messages'), (snapshot) => {
         if(document.getElementById("loader")){
             setTimeout(() => {
                 document.getElementById("loader").remove()
-            }, 3000);
+            }, 5000);
         }
         if(snapshot.val().join){
             if(snapshot.val().user == userName){
@@ -140,7 +156,16 @@ function retrieveData(){
             }
             setTimeout(() => {
                 remove(ref(db, 'messages/' + snapshot.key))
-            }, 1000);
+            }, 10000);
+        }
+        else if(snapshot.val().typer){
+            if(snapshot.val().user == userName){
+                status.innerHTML = `
+                <span class="typing"><span class="typerName">You</span> are typing...</span>`;
+            }else{
+                status.innerHTML = `
+                <span class="typing"><span class="typerName" id="${snapshot.key}name">${snapshot.val().user}</span> is typing...</span>`;
+            }
         }
         else{
             if (snapshot.val().user == userName) {
@@ -148,7 +173,7 @@ function retrieveData(){
                 `<div id="${snapshot.key}outerSkin" class="outerSkin myOuterSkin" ondblclick="module.replyTo(${snapshot.key})">
                     <div class="msgContainer myMsgContainer">
                         <div class="funcBtns" id="${snapshot.key}funcBtns">
-                            <button id="${snapshot.key}selectBtn" class="selectMsgBox" onclick="module.selectMsg(${snapshot.key})">Lock</button>
+                            <button id="${snapshot.key}selectBtn" class="selectMsgBox" onclick="module.selectMsg(${snapshot.key})"><svg width="11px" height="11px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M16.584 6C15.8124 4.2341 14.0503 3 12 3C9.23858 3 7 5.23858 7 8V10.0288M12 14.5V16.5M7 10.0288C7.47142 10 8.05259 10 8.8 10H15.2C16.8802 10 17.7202 10 18.362 10.327C18.9265 10.6146 19.3854 11.0735 19.673 11.638C20 12.2798 20 13.1198 20 14.8V16.2C20 17.8802 20 18.7202 19.673 19.362C19.3854 19.9265 18.9265 20.3854 18.362 20.673C17.7202 21 16.8802 21 15.2 21H8.8C7.11984 21 6.27976 21 5.63803 20.673C5.07354 20.3854 4.6146 19.9265 4.32698 19.362C4 18.7202 4 17.8802 4 16.2V14.8C4 13.1198 4 12.2798 4.32698 11.638C4.6146 11.0735 5.07354 10.6146 5.63803 10.327C5.99429 10.1455 6.41168 10.0647 7 10.0288Z" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg></button>
                             <button id="${snapshot.key}delBtn" class="deleteMsg" onclick="module.delMsg(${snapshot.key})">Del</button>
                         </div>
                         <div id="${snapshot.key}mainMsgSec" class="mainMsgSec myMainMsgSec">
@@ -178,7 +203,7 @@ function retrieveData(){
                                 </div>
                             </div>
                             <div class="funcBtns" id="${snapshot.key}funcBtns">
-                                <button id="${snapshot.key}selectBtn" class="selectMsgBox" onclick="module.selectMsg(${snapshot.key})">Lock</button>
+                                <button id="${snapshot.key}selectBtn" class="selectMsgBox" onclick="module.selectMsg(${snapshot.key})"><svg width="11px" height="11px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M16.584 6C15.8124 4.2341 14.0503 3 12 3C9.23858 3 7 5.23858 7 8V10.0288M12 14.5V16.5M7 10.0288C7.47142 10 8.05259 10 8.8 10H15.2C16.8802 10 17.7202 10 18.362 10.327C18.9265 10.6146 19.3854 11.0735 19.673 11.638C20 12.2798 20 13.1198 20 14.8V16.2C20 17.8802 20 18.7202 19.673 19.362C19.3854 19.9265 18.9265 20.3854 18.362 20.673C17.7202 21 16.8802 21 15.2 21H8.8C7.11984 21 6.27976 21 5.63803 20.673C5.07354 20.3854 4.6146 19.9265 4.32698 19.362C4 18.7202 4 17.8802 4 16.2V14.8C4 13.1198 4 12.2798 4.32698 11.638C4.6146 11.0735 5.07354 10.6146 5.63803 10.327C5.99429 10.1455 6.41168 10.0647 7 10.0288Z" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg></button>
                                 <button id="${snapshot.key}delBtn" class="deleteMsg" onclick="module.delMsg(${snapshot.key})">Del</button>
                             </div>
                         </div>
@@ -201,7 +226,7 @@ function retrieveData(){
                                 </div>
                             </div>
                             <div class="funcBtns" id="${snapshot.key}funcBtns">
-                                <button id="${snapshot.key}selectBtn" class="selectMsgBox" onclick="module.selectMsg(${snapshot.key})">Lock</button>
+                                <button id="${snapshot.key}selectBtn" class="selectMsgBox" onclick="module.selectMsg(${snapshot.key})"><svg width="11px" height="11px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M16.584 6C15.8124 4.2341 14.0503 3 12 3C9.23858 3 7 5.23858 7 8V10.0288M12 14.5V16.5M7 10.0288C7.47142 10 8.05259 10 8.8 10H15.2C16.8802 10 17.7202 10 18.362 10.327C18.9265 10.6146 19.3854 11.0735 19.673 11.638C20 12.2798 20 13.1198 20 14.8V16.2C20 17.8802 20 18.7202 19.673 19.362C19.3854 19.9265 18.9265 20.3854 18.362 20.673C17.7202 21 16.8802 21 15.2 21H8.8C7.11984 21 6.27976 21 5.63803 20.673C5.07354 20.3854 4.6146 19.9265 4.32698 19.362C4 18.7202 4 17.8802 4 16.2V14.8C4 13.1198 4 12.2798 4.32698 11.638C4.6146 11.0735 5.07354 10.6146 5.63803 10.327C5.99429 10.1455 6.41168 10.0647 7 10.0288Z" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg></button>
                                 <nonsense id="${snapshot.key}delBtn" />
                             </div>
                         </div>
@@ -223,7 +248,7 @@ function retrieveData(){
                 if(snapshot.val().user == userName){
                     document.getElementById(snapshot.key+'replyToMsgSec').innerHTML =
                     `<div class="replyToMsgSecIn replyToMsgSecInMy">
-                        <div id="${snapshot.key}replyToMsgSecInner" class="replyToMsgSecInner replyToMsgSecInnerMy" onclick="window.location.href = '#${snapshot.val().key}outerSkin';document.getElementById('${snapshot.val().key}outerSkin').classList.add('highlighted');setTimeout(() => {document.getElementById('${snapshot.val().key}outerSkin').classList.remove('highlighted')}, 3000)">
+                        <div id="${snapshot.key}replyToMsgSecInner" class="replyToMsgSecInner replyToMsgSecInnerMy" onclick="window.location.href = '#${snapshot.val().key}outerSkin';document.getElementById('${snapshot.val().key}outerSkin').classList.add('highlighted');setTimeout(() => {document.getElementById('${snapshot.val().key}outerSkin').classList.remove('highlighted')}, 5000)">
                             <div class="replyToUserBox replyToUserBoxMy">
                                 <span class="replyToUserBoxIn" id="${snapshot.key}replyToUserBoxIn">
                                     ${xName}
@@ -239,7 +264,7 @@ function retrieveData(){
                 }else{
                     document.getElementById(snapshot.key+'replyToMsgSec').innerHTML =
                     `<div class="replyToMsgSecIn replyToMsgSecInYour">
-                        <div id="${snapshot.key}replyToMsgSecInner" class="replyToMsgSecInner replyToMsgSecInnerYour" onclick="window.location.href = '#${snapshot.val().key}outerSkin';document.getElementById('${snapshot.val().key}outerSkin').classList.add('highlighted');setTimeout(() => {document.getElementById('${snapshot.val().key}outerSkin').classList.remove('highlighted')}, 3000)">
+                        <div id="${snapshot.key}replyToMsgSecInner" class="replyToMsgSecInner replyToMsgSecInnerYour" onclick="window.location.href = '#${snapshot.val().key}outerSkin';document.getElementById('${snapshot.val().key}outerSkin').classList.add('highlighted');setTimeout(() => {document.getElementById('${snapshot.val().key}outerSkin').classList.remove('highlighted')}, 5000)">
                             <div class="replyToUserBox replyToUserBoxYour">
                                 <span class="replyToUserBoxIn" id="${snapshot.key}replyToUserBoxIn">
                                     ${xName}
@@ -270,9 +295,26 @@ function retrieveData(){
             if (/\p{Extended_Pictographic}/u.test(snapshot.val().message) == true && snapshot.val().message.length <= 2) {
                 document.getElementById(snapshot.key).classList.add("imojiMsg");
             }
+            if(snapshot.val().reply){
+                var replyToUserBoxIn = document.getElementById(snapshot.key+"replyToUserBoxIn");
+                var replyToMsgSecInner = document.getElementById(snapshot.key+'replyToMsgSecInner');
+                function getRandomColor2(name) {
+                    const asciiCode = name.charCodeAt(0);
+                    const colorNum = asciiCode.toString() + asciiCode.toString() + asciiCode.toString();
+                    var num = Math.round(0xffffff * parseInt(colorNum));
+                    var r = num >> 16 & 255;
+                    var g = num >> 8 & 255;
+                    var b = num & 255;
+                    replyToUserBoxIn.style.color = 'rgb(' + r + ', ' + g + ', ' + b + ', 1)';
+                    replyToMsgSecInner.style.borderColor = 'rgb(' + r + ', ' + g + ', ' + b + ', 1)';
+                }
+                getRandomColor2(snapshot.val().replyToUser.charAt(0))
+            }
         }
         if(snapshot.val().user !== userName){
-            var profilePic = document.getElementById(snapshot.key+'profilePic');
+            if(!snapshot.val().join){
+                var profilePic = document.getElementById(snapshot.key+'profilePic');
+            }
             var yourUsername = document.getElementById(snapshot.key + "name");
             function getRandomColor(name) {
                 const asciiCode = name.charCodeAt(0);
@@ -282,27 +324,27 @@ function retrieveData(){
                 var g = num >> 8 & 255;
                 var b = num & 255;
                 yourUsername.style.color = 'rgb(' + r + ', ' + g + ', ' + b + ', 1)';
-                profilePic.style.backgroundColor = 'rgb(' + r + ', ' + g + ', ' + b + ', 1)';
+                if(!(snapshot.val().join || snapshot.val().typer)){
+                    profilePic.style.backgroundColor = 'rgb(' + r + ', ' + g + ', ' + b + ', 1)';
+                }
             }
             getRandomColor(snapshot.val().user.charAt(0))
         }
-        if(snapshot.val().reply){
-            var replyToUserBoxIn = document.getElementById(snapshot.key+"replyToUserBoxIn");
-            var replyToMsgSecInner = document.getElementById(snapshot.key+'replyToMsgSecInner');
-            function getRandomColor2(name) {
-                const asciiCode = name.charCodeAt(0);
-                const colorNum = asciiCode.toString() + asciiCode.toString() + asciiCode.toString();
-                var num = Math.round(0xffffff * parseInt(colorNum));
-                var r = num >> 16 & 255;
-                var g = num >> 8 & 255;
-                var b = num & 255;
-                replyToUserBoxIn.style.color = 'rgb(' + r + ', ' + g + ', ' + b + ', 1)';
-                replyToMsgSecInner.style.borderColor = 'rgb(' + r + ', ' + g + ', ' + b + ', 1)';
-            }
-            getRandomColor2(snapshot.val().replyToUser.charAt(0))
-        }
         userData.scrollTop = userData.scrollHeight;
     })
+    typer.onkeydown = function(){
+        window.clearTimeout(timer);
+        set(ref(db, 'messages/typings'), {
+            typer: true,
+            user: localStorage.getItem('userName').trim(),
+        })
+    }
+    typer.onkeyup = function(){
+        window.clearTimeout(timer);
+        timer = window.setTimeout(()=>{
+            remove(ref(db, 'messages/typings'))
+        }, timeoutVal)
+    }
     module.delMsg = function delMsg(key) {
         remove(ref(db, 'messages/' + key))
     }
@@ -321,7 +363,7 @@ function retrieveData(){
         `<div class="replyToMsgSecPad">
             <div class="replyToMsgSecIn">
                 <button class="closeReplying" type="button" onclick="replyToMsgSec.innerHTML = ''"></button>
-                <div class="replyToMsgSecInner" onclick="window.location.href = '#${key}outerSkin';document.getElementById('${key}outerSkin').classList.add('highlighted');setTimeout(() => {document.getElementById('${key}outerSkin').classList.remove('highlighted')}, 3000)">
+                <div class="replyToMsgSecInner" onclick="window.location.href = '#${key}outerSkin';document.getElementById('${key}outerSkin').classList.add('highlighted');setTimeout(() => {document.getElementById('${key}outerSkin').classList.remove('highlighted')}, 5000)">
                     <div class="replyToUserBox">
                         <span class="replyToUserBoxIn" id="replyToUserBoxIn">
                             ${replyToUser}
@@ -349,6 +391,10 @@ function retrieveData(){
             }
             document.getElementById(snapshot.key + 'funcBtns').remove();
             document.getElementById(snapshot.key+'replyToMsgSec').remove();
+        }
+        if(snapshot.val().typer){
+            status.innerHTML = `
+            <span class="typing"><span class="typerName">All</span> done typing!</span>`;
         }
     })
 }
