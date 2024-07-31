@@ -142,7 +142,7 @@ function retrieveData(){
     var nameRegex = /(@[^\s]+)/g;
     onChildAdded(ref(db, 'messages'), (snapshot) => {
         if(document.getElementById("loader")){
-           setTimeout(() => {
+            setTimeout(() => {
                 document.getElementById("loader").remove()
             }, 2000);
         }
