@@ -141,11 +141,11 @@ function retrieveData(){
     var urlRegex = /(https?:\/\/[^\s]+)/g;
     var nameRegex = /(@[^\s]+)/g;
     onChildAdded(ref(db, 'messages'), (snapshot) => {
-        // if(document.getElementById("loader")){
-        //     setTimeout(() => {
-        //         document.getElementById("loader").remove()
-        //     }, 2000);
-        // }
+        if(document.getElementById("loader")){
+           setTimeout(() => {
+                document.getElementById("loader").remove()
+            }, 2000);
+        }
         if(snapshot.val().join){
             if(snapshot.val().user == userName){
                 userData.innerHTML += 
