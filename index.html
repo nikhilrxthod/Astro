@@ -29,24 +29,9 @@
               <ellipse id="path851" cx="46.37" cy="63.24" fill="#d594ff" fill-opacity="1" stroke-width=".4" opacity="1" rx="2.01" ry="1.24"/>
             </g>
         </svg>
+        <p class="regard regardA">Regards:<br><span class="regardName">Nikhil Rathod</span></p>
     </div>
-    <div class="background">
-        <div class="area">
-            <ul class="circles">
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-            </ul>
-        </div>
-    </div>
-    <div class="main">
+    <div class="main" id="main">
         <div class="skin">
 			<nav class="navbar">
 				<div class="leftSide">
@@ -70,12 +55,28 @@
                     <div class="aboutThis">
                         <div class="currentTime" id="currentTime"></div>
                         <h2 class="abt">About</h2>
-                        <p class="aboutTxt">This content is under construction, it will aprear soon.</p>
-                        <p class="regard">Regars:<br><span class="regardName">Nikhil Rathod</span></p>
+                        <p class="aboutTxt">This content is under construction, it will appear soon.</p>
+                        <p class="regard regardB">Regars:<br><span class="regardName">Nikhil Rathod</span></p>
                     </div>
                 </div>
 			</nav>
 			<div name="userData" class="messageSec" id="messageSec">
+                <div class="background">
+                    <div class="area">
+                        <ul class="circles">
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                        </ul>
+                    </div>
+                </div>
 				<div class="height"></div>
 				<div id="messageSecIn" class="messageSecIn">
 					<div class="outerSkin yourOuterSkin" id="test">
@@ -83,7 +84,12 @@
                             <div class="profilePic yourProfilePic">/</div>
 							<div class="mainMsgSec yourMainMsgSec">
 								<div class="msgBox yourMsgBox">
-									<span id="yourMessage" class="message yourMessage astroSays" style="font-family: monospace;font-size: .9rem;">Hello <span class="username username2" id="myUsername2">user</span>,<br>here is the application you always wished for. Where you can talk to other stranger friends without lossing your identity.<br><br><b>I Wish you'll create Happy Moments....<div id="currentTime2" class="currentTime currentTime2"></div></b></span>
+									<span id="yourMessage" class="message yourMessage astroSays" style="font-family: monospace;font-size: .9rem;">
+                                        Hello <span class="username username2" id="myUsername2">user</span>,
+                                        <br>here is the application you always wished for. Where you can talk to other stranger friends without lossing your identity.<br><br>
+                                        <b><del>I Wish you'll create Happy Moments....</del></b>
+                                        <div id="currentTime2" class="currentTime currentTime2">00:00 AM, Mon 0th of January, 0000</div>
+                                    </span>
 								</div>
 							</div>
 						</div>
@@ -96,10 +102,11 @@
 					</div>
 				</div>
 			</div>
-            <div class="typerStatus" id="typerStatus">
-                <span class="typing">
+            <div class="typerStatus">
+                <span class="typing" id="typerStatus">
                     <span class="typerName">All</span> done typing!
                 </span>
+                <i class="wordColor" id="wordColor"></i>
             </div>
 			<div class="typeMsg">
                 <div name="replyToMsgSec" class="replyToMsgSec" id="replyToMsgSec"></div>
@@ -109,7 +116,7 @@
                         <span style="pointer-events: none;" class="menuTxt" name="menuTxt">Menu</span>
                     </button>
                     <div class="inputSec" id="typer" onclick="triggered()" onmouseleave="unTriggered()">
-                        <div id="inputBox" name="inputBox" class="inputBox" contenteditable="true" data-placeholder="Message"></div>
+                        <div id="inputBox" name="inputBox" class="inputBox" oninput="getRandomColor(this.innerText.trim().slice(-1))" contenteditable="true" data-placeholder="Message"></div>
                     </div>
                     <button id="sendBtn" class="sendBtn" type="button" onclick="module.sendMsg();triggered();scrollDown()"  onmouseleave="unTriggered()">
                         <span style="pointer-events: none;" class="sendBtnTxt sendBtnTxtHide">Send</span>
@@ -135,8 +142,18 @@
             menuTxt.classList.remove('menuTxtHide')
             sendBtnTxt.classList.add('sendBtnTxtHide')
         }
+        var wordColor = document.getElementById('wordColor');
+        function getRandomColor(name) {
+            const asciiCode = name.charCodeAt(0);
+            const colorNum = asciiCode.toString() + asciiCode.toString() + asciiCode.toString();
+            var num = Math.round(0xffffff * parseInt(colorNum));
+            var r = num >> 16 & 255;
+            var g = num >> 8 & 255;
+            var b = num & 255;
+            wordColor.style.backgroundColor = 'rgb(' + r + ', ' + g + ', ' + b + ', 1)';
+            wordColor.style.boxShadow = '0 0 5px rgb(' + r + ', ' + g + ', ' + b + ', 1)';
+        }
     </script>
 	<script src="moreFiles/script.js" type="module"></script>
 </body>
 </html>
-
