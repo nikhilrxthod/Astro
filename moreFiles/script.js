@@ -17,13 +17,11 @@ const db = getDatabase(app);
 setInterval(() => {
     var getDate = new Date(),
     utc = getDate.getTime() + (getDate.getTimezoneOffset() * 60000),
-    nd = new Date(utc + (3600000*+5.5));
-    var ist =  nd.toLocaleString(),
     weekday = new Array('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'),
     dayOfWeek = weekday[getDate.getDay()],
     domEnder = function() { var a = getDate; if (/1/.test(parseInt((a + "").charAt(0)))) return "th"; a = parseInt((a + "").charAt(1)); return 1 == a ? "st" : 2 == a ? "nd" : 3 == a ? "rd" : "th" }(),
     dayOfMonth = currentDate + ( getDate.getDate() < 10) ? '0' + getDate.getDate() + domEnder : getDate.getDate() + domEnder,
-    months = new Array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'),
+    months = new Array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'),
     curMonth = months[getDate.getMonth()],
     curYear = getDate.getFullYear();
     var currentTime = getDate.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true });
@@ -71,8 +69,8 @@ function retrieveData(){
     var timeStamp = new Date().getTime();
     var getDate = new Date();
     var currentTime = getDate.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true });
-    set(ref(db, 'joinedUsers/' + timeStamp), {
-        user: localStorage.getItem('userName').trim() + ', ' + currentTime
+    set(ref(db, 'joinedUsers/' + userName), {
+        time: currentTime
     })
     setTimeout(() => {
         set(ref(db, 'messages/' + timeStamp), {
@@ -94,41 +92,43 @@ function retrieveData(){
         var currentTime = getDate.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true });
         var currentDate = currentTime + ", " + dayOfWeek + " " + dayOfMonth + " of " + curMonth + ", " + curYear;
         if (userMessage.innerText.trim().length !== 0) {
-          if (userMessage.innerText.trim().split(" ")[0] == (admin + '@')) {
-            if (userMessage.innerText.trim().split(" ")[1].trim().length !== 0) {
-                localStorage.setItem("userName", userMessage.innerText.trim().split(" ")[1].toLowerCase().trim());
-                username.innerText = localStorage.getItem("userName");
-                img.innerText = localStorage.getItem("userName").split(' ')[0].charAt(0).toUpperCase();
-                getRandomColor(localStorage.getItem("userName").split(' ')[0].charAt(0))
+            if (userMessage.innerText.trim().split(" ")[0] == (admin + '@')) {
+                if (userMessage.innerText.trim().split(" ")[1].trim().length !== 0) {
+                    localStorage.setItem("userName", userMessage.innerText.trim().split(" ")[1].toLowerCase().trim());
+                    username.innerText = localStorage.getItem("userName");
+                    img.innerText = localStorage.getItem("userName").split(' ')[0].charAt(0).toUpperCase();
+                    getRandomColor(localStorage.getItem("userName").split(' ')[0].charAt(0))
+                }
+            } else if (userMessage.innerText.trim() == (admin + '@clear')) {
+                remove(ref(db, 'messages/'));
+            }else {
+                if(document.querySelector('.replyToMsgSecPad')){
+                    let replyToMsgBoxIn = document.getElementById("replyToMsgBoxIn");
+                    let replyToUserBoxIn = document.getElementById("replyToUserBoxIn").innerHTML.trim();
+                    set(ref(db, 'messages/' + timeStamp), {
+                        key: replyToMsgBoxIn.getAttribute('key'),
+                        replyToUser: replyToUserBoxIn,
+                        replyToMsg: replyToMsgBoxIn.innerText.trim(),
+                        user: localStorage.getItem('userName').trim(),
+                        message: userMessage.innerText.trim(),
+                        time: currentTime,
+                        date: currentDate,
+                        reply: true
+                    }).then(() => {
+                        sent.play();
+                        document.getElementById("replyToMsgSec").innerHTML = '';
+                    })
+                } else{
+                    set(ref(db, 'messages/' + timeStamp), {
+                        user: localStorage.getItem('userName').trim(),
+                        message: userMessage.innerText.trim(),
+                        time: currentTime,
+                        date: currentDate,
+                    }).then(() => {
+                        sent.play();
+                    })
+                }
             }
-          } else if (userMessage.innerText.trim() == (admin + '@clear')) {
-            remove(ref(db, 'messages/'));
-        }else if(document.querySelector('.replyToMsgSecPad')){
-            let replyToMsgBoxIn = document.getElementById("replyToMsgBoxIn");
-            let replyToUserBoxIn = document.getElementById("replyToUserBoxIn").innerHTML.trim();
-            set(ref(db, 'messages/' + timeStamp), {
-                key: replyToMsgBoxIn.getAttribute('key'),
-                replyToUser: replyToUserBoxIn,
-                replyToMsg: replyToMsgBoxIn.innerText.trim(),
-                user: localStorage.getItem('userName').trim(),
-                message: userMessage.innerText.trim(),
-                time: currentTime,
-                date: currentDate,
-                reply: true
-            }).then(() => {
-                sent.play();
-                document.getElementById("replyToMsgSec").innerHTML = '';
-            })
-        } else{
-            set(ref(db, 'messages/' + timeStamp), {
-                user: localStorage.getItem('userName').trim(),
-                message: userMessage.innerText.trim(),
-                time: currentTime,
-                date: currentDate,
-            }).then(() => {
-                sent.play();
-            })
-          }
         }
         userMessage.focus()
         userMessage.innerText = "";
@@ -142,10 +142,11 @@ function retrieveData(){
     var nameRegex = /(@[^\s]+)/g;
     onChildAdded(ref(db, 'messages'), (snapshot) => {
         if(document.getElementById("loader")){
-            setTimeout(() => {
-                document.getElementById("loader").remove()
-            }, 2000);
+            document.getElementById("loader").remove();
         }
+        setTimeout(() => {
+            userMessage.focus();
+        }, 1000);
         if(snapshot.val().join){
             if(snapshot.val().user == userName){
                 userData.innerHTML += 
@@ -168,11 +169,9 @@ function retrieveData(){
         }
         else if(snapshot.val().typer){
             if(snapshot.val().user == userName){
-                typerStatus.innerHTML = `
-                <span class="typing"><span class="typerName">You</span> are typing...</span>`;
+                typerStatus.innerHTML = `<span class="typerName">Typing..</span>`;
             }else{
-                typerStatus.innerHTML = `
-                <span class="typing"><span class="typerName" id="${snapshot.key}name">${snapshot.val().user}</span> is typing...</span>`;
+                typerStatus.innerHTML = `<span class="typerName" id="${snapshot.key}name">${snapshot.val().user}</span> is typing...`;
             }
         }
         else{
@@ -200,7 +199,7 @@ function retrieveData(){
                     </div>
                 </div>`;
             } else {
-                if (localStorage.getItem("userName") == "#" + admin.toLowerCase()) {
+                if (localStorage.getItem("userName") == "@" + admin.toLowerCase()) {
                     userData.innerHTML += 
                     `<div id="${snapshot.key}outerSkin" class="outerSkin yourOuterSkin" ondblclick="module.replyTo(${snapshot.key})">
                         <div class="msgContainer yourMsgContainer" id="${snapshot.key}msgContainer">
@@ -410,8 +409,7 @@ function retrieveData(){
             document.getElementById(snapshot.key+'replyToMsgSec').remove();
         }
         if(snapshot.val().typer){
-            typerStatus.innerHTML = `
-            <span class="typing"><span class="typerName">All</span> done typing!</span>`;
+            typerStatus.innerHTML = `<span class="typerName">All</span> done typing!`;
         }
     })
 }
